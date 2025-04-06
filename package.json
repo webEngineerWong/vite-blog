@@ -51,11 +51,13 @@
     "zx": "^7.2.3"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
     "@xiaomh/vue3-alan-vite-component": "1.2.3",
     "blueimp-md5": "^2.19.0",
     "busuanzi.pure.js": "^1.0.3",
     "canvas-confetti": "^1.9.3",
     "dayjs": "^1.11.10",
+    "element-plus": "^2.9.7",
     "fast-glob": "^3.3.1",
     "gray-matter": "^4.0.3",
     "oh-my-live2d": "^0.19.3",

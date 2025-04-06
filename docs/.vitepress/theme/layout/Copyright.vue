@@ -55,7 +55,7 @@ import { useData } from "vitepress";
 const { theme, frontmatter } = useData();
 
 const data = reactive({
-  author: "AaronWong",
+  author: "zubylon",
   authorLink:
     frontmatter.value?.authorLink ??
     theme?.value?.articleMetadataConfig?.authorLink,

@@ -43,7 +43,6 @@
   }
   
   .container {
-    background-color: var(--vp-c-bg-soft);
     border-radius: 8px;
     width: 100%;
     min-height: 32px;

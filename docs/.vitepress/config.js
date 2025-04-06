@@ -12,5 +12,9 @@ export default {
   markdown,
   themeConfig,
   head,
-  base:'/blog',
+  base:'/blog/',
+  sitemap: {
+    hostname: 'https://www.zubylon.tech/blog/',
+    lastmodDateOnly: true
+  }
 }
