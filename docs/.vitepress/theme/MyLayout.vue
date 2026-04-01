@@ -1,82 +1,60 @@
 <script setup>
-import DefaultTheme from "vitepress/theme";
 import Copyright from "./layout/Copyright.vue";
 import ValineComment from "../ValineComment/index.vue";
-import { useData } from "vitepress";
+import { useData, withBase } from "vitepress";
 import md5 from "blueimp-md5";
-import { onMounted } from "vue";
+import { nextTick, onMounted, ref } from "vue";
 const { page } = useData();
 import Layout from "./components/Layout.vue";
-import SvgIcon from "./components/SvgIcon.vue";
+
+const live2dOptions = {
+  apiPath: "https://cdn.jsdelivr.net/npm/live2d-static-api@latest/indexes",
+  model: ["Potion-Maker/Pio", "default"],
+  size: 255,
+  direction: "left",
+  customId: "site-live2d-canvas",
+};
+
+const showLive2d = ref(false);
+
 const detectDeviceType = () => {
-  if (typeof window === "undefined") return;
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    navigator.userAgent
-  )
-    ? "Mobile"
-    : "Desktop";
+  if (typeof window === "undefined") return "Desktop";
+  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+  const isMobileUA =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
+  return isTouchDevice || isMobileUA ? "Mobile" : "Desktop";
 };
 
 onMounted(async () => {
-  // 在这里动态导入 `oh-my-live2d`, 并调用 `loadOml2d` 方法
-  const { loadOml2d } = await import("oh-my-live2d");
+  if (detectDeviceType() === "Mobile") return;
 
-  // 在这里使用
-  loadOml2d({
-    tips: (_, currentIndex) => {
-      if (currentIndex === 0) {
-        return {
-          copyTips: {
-            message: ["复制了啥?"],
-          },
-          idleTips: {
-            wordTheDay: true,
-          },
-        };
-      } else {
-        return {
-          idleTips: {
-            wordTheDay: false,
-          },
-        };
-      }
-    },
-    menus: {
-      items: (defaultItems) => [
-        ...defaultItems.filter((item) => item.id !== "About"), // 移除原About项
-        {
-          id: "About",
-          title: "GitHub",
-          icon: () =>
-            h(SvgIcon, {
-              name: "github",
-              size: 16,
-              class: "text-dark dark:text-light",
-            }),
-          onClick: () => {
-            window.open("https://github.com/webEngineerWong");
-          },
-        },
-      ],
-    },
-    models: [
-      {
-        path: "https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/kesshouban/model.json",
-        position: [50, 20],
-        scale: 0.2,
-      },
-      {
-        path: "https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/haru02/haru02.model.json",
-        position: [-80, 80],
-        scale: 0.1,
-      },
-    ],
-    dockedPosition: "left",
-    primaryColor: "#38B0DE",
-    tips: {
-      wordTheDay: true,
-    },
-  });
+  showLive2d.value = true;
+  await nextTick();
+
+  const [modelPath, textureId] = live2dOptions.model;
+  const modelUrl = `${live2dOptions.apiPath}/${modelPath}/${textureId}.json`;
+
+  // live2d.min.js 通过 head 配置以 <script> 标签加载，
+  // 但可能还没执行完，做一个短暂轮询等待
+  let waited = 0;
+  while (typeof window.loadlive2d !== "function" && waited < 5000) {
+    await new Promise((r) => setTimeout(r, 100));
+    waited += 100;
+  }
+
+  if (typeof window.loadlive2d !== "function") {
+    console.error("[live2d] loadlive2d not available after waiting 5s");
+    return;
+  }
+
+  try {
+    window.loadlive2d(live2dOptions.customId, modelUrl);
+    console.log("[live2d] loaded:", modelUrl);
+  } catch (e) {
+    console.error("[live2d] load failed", e);
+  }
 });
 </script>
 
@@ -87,9 +65,6 @@ onMounted(async () => {
         <Copyright :key="md5(page.relativePath)" />
       </ClientOnly>
     </template>
-    <template #home-hero-after>
-      <Live2D />
-    </template>
     <template #doc-after>
       <ClientOnly>
         <ValineComment />
@@ -99,4 +74,27 @@ onMounted(async () => {
   </Layout>
   <Confetti></Confetti>
   <VisitorPanel />
+  <ClientOnly>
+    <div v-if="showLive2d" class="site-live2d-wrap">
+      <canvas
+        :id="live2dOptions.customId"
+        :width="live2dOptions.size"
+        :height="live2dOptions.size"
+      ></canvas>
+    </div>
+  </ClientOnly>
 </template>
+
+<style scoped>
+.site-live2d-wrap {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 120;
+  pointer-events: none;
+}
+.site-live2d-wrap canvas {
+  pointer-events: auto;
+  cursor: grab;
+}
+</style>

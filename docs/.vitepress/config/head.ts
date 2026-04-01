@@ -2,6 +2,7 @@ import type { HeadConfig } from "vitepress";
 
 const head: HeadConfig[] = [
   ["link", { rel: "icon", href: "/blog/assets/favicon.ico" }],
+  ["script", { src: "/blog/live2d/live2d.min.js" }],
   ["meta", { name: "author", content: "AaronWong" }],
   [
     "meta",

@@ -2,36 +2,26 @@
 layout: home
 
 title: Zubylon
-titleTemplate: 个人技术旅行纪录使用
+titleTemplate: Aaron Wong 的前端工程与内容沉淀站
 
 hero:
-  name: 个人站点
-  text: 专注  & 分享
-  tagline: 个人知识库
+  name: Aaron Wong
+  text: 前端知识库与工程实践
+  tagline: 围绕面试题、源码、工程化、算法与工具，持续整理日常开发中的高频问题、项目经验与实用清单。
   actions:
     - theme: brand
-      text:  🔥🔥🔥最火DeepSeek🐳问答 
-      link: https://zubylon.tech/deepseek-chat/
-    - theme: brand
-      text:  剑指offer（Python版本）视频 
-      link: /learning/python/
-    - theme: alt
-      text: 开始
+      text: 查看精选内容
       link: /interview-questions/html/start/
     - theme: alt
-      text: 在 github 上查看
+      text: 工程化专题
+      link: /engineering/npm/private/
+    - theme: alt
+      text: GitHub
       link: https://github.com/webEngineerWong
     - theme: alt
-      text: 在 掘金 上查看
+      text: 掘金
       link: https://juejin.cn/user/281091999819374
-
-
 ---
 
 <HotDocList />
 <HomeBackgrount></HomeBackgrount>
-<Live2D></Live2D>
-
-
-
-

@@ -106,6 +106,7 @@ dist
 
 # vitepress build output
 **/.vitepress/dist
+**/.vitepress/dist.zip
 
 # vitepress cache directory
 **/.vitepress/cache

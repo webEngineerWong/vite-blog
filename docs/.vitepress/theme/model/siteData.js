@@ -39,14 +39,14 @@ export const siteData = [
   {
     name: "HTTP",
     desc: "HTTPS安全加密与HTTP协议对比分析",
-    link: "http://localhost:5173/blog/basic-quality/http/http-https/",
+    link: "/basic-quality/http/http-https/",
     image: viteBg5, // 网络图片
     tags: "HTTP",
   },
   {
     name: "面试题集合",
     desc: "常见前端面试题集合，包含JS、CSS、HTML等",
-    link: "https://cn.vitest.dev/",
+    link: "/interview-questions/topic-outline/2022-html/",
     image: viteBg6, // 网络图片
     tags: "面试题",
   },
